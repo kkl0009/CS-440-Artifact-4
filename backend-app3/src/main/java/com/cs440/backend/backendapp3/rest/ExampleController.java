@@ -11,11 +11,11 @@ import com.cs440.backend.backendapp3.objects.ExampleObject;
 @RestController
 public class ExampleController {
 
-	private static final String template = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
-
-	@GetMapping("/greeting")
-	public ExampleObject greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new ExampleObject(counter.incrementAndGet(), String.format(template, name));
-	}
+//	private static final String template = "Hello, %s!";
+//	private final AtomicLong counter = new AtomicLong();
+//
+//	@GetMapping("/greeting")
+//	public ExampleObject greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+//		return new ExampleObject(counter.incrementAndGet(), String.format(template, name));
+//	}
 }
