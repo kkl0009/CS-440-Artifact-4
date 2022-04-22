@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
-POKEMON PAGE
+<body onload="getSpecies()">
+POKEMON<br>
+<div id="listArea"></div>
+
+<script>
+const getSpecies = async () => {
+	const response = await fetch('http://localhost:8080/getSpecies'); //hit REST endpoint
+	const myJson = await response.json(); //read response from endpoint as JSON
+	const listArea = document.getElementById("listArea");
+	for (var i = 0; i < myJson.length; i++) {
+		const newItem = document.createElement("a");
+		const text = document.createTextNode(myJson[i][1]); //get Species name
+		newItem.href = "/species?pokedexNum=" + myJson[i][0];
+		newItem.appendChild(text);
+		listArea.appendChild(newItem);
+		listArea.appendChild(document.createElement("br"));
+	}
+}
+</script>
+
 </body>
 </html>
