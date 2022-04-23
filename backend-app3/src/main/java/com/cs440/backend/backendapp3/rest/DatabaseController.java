@@ -17,6 +17,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cs440.backend.backendapp3.objects.Move;
 import com.cs440.backend.backendapp3.objects.Species;
 
 @RestController
@@ -99,6 +100,18 @@ public class DatabaseController {
 			return new Species(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
 		}
 		else return null;
+	}
+	
+	public static List<Move> getLearnableMoves(int pokedexNum) throws SQLException {
+		String query = "SELECT MOVE.* FROM MOVE, CAN_LEARN, SPECIES WHERE SPECIES.POKEDEXNUM = ? AND CAN_LEARN.SPECIESNUM = SPECIES.POKEDEXNUM AND CAN_LEARN.MOVEID = MOVE.ID";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, pokedexNum);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<Move> moves = new LinkedList<Move>();
+		while (rs.next()) {
+			moves.add(new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6)));
+		}
+		return moves;
 	}
 	
 	public static void deleteSpecies(int pokedexNum) throws SQLException {

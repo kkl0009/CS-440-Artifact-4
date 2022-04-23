@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cs440.backend.backendapp3.objects.Move;
 import com.cs440.backend.backendapp3.objects.Species;
 
 @Controller
@@ -30,6 +31,7 @@ public class PageController {
 	public ModelAndView species(@RequestParam(value = "pokedexNum", required = true) int pokedexNum) throws SQLException {
 		ModelAndView mv = new ModelAndView("species");
 		Species result = DatabaseController.getSpecies(pokedexNum);
+		List<Move> moves = DatabaseController.getLearnableMoves(pokedexNum);
 		Species evolution;
 		if (result.getEvolutionNum() != 0) {
 			evolution = DatabaseController.getSpecies(result.getEvolutionNum());
@@ -38,6 +40,7 @@ public class PageController {
 		
 		mv.addObject("species", result);
 		mv.addObject("evolution", evolution);
+		mv.addObject("moves", moves);
 		return mv;
 	}
 	
@@ -62,6 +65,7 @@ public class PageController {
 		DatabaseController.updateSpecies(species);
 		ModelAndView mv = new ModelAndView("species");
 		Species result = DatabaseController.getSpecies(species.getPokedexNum());
+		List<Move> moves = DatabaseController.getLearnableMoves(species.getPokedexNum());
 		Species evolution;
 		if (result.getEvolutionNum() != 0) {
 			evolution = DatabaseController.getSpecies(result.getEvolutionNum());
@@ -70,6 +74,7 @@ public class PageController {
 		
 		mv.addObject("species", result);
 		mv.addObject("evolution", evolution);
+		mv.addObject("moves", moves);
 		return mv;
 	}
 	
@@ -89,6 +94,7 @@ public class PageController {
 	public ModelAndView submitAddSpecies(@ModelAttribute Species species, Model model) throws SQLException {
 		DatabaseController.addSpecies(species);
 		ModelAndView mv = new ModelAndView("species");
+		List<Move> moves = DatabaseController.getLearnableMoves(species.getPokedexNum());
 		Species evolution;
 		if (species.getEvolutionNum() != 0) {
 			evolution = DatabaseController.getSpecies(species.getEvolutionNum());
@@ -97,6 +103,7 @@ public class PageController {
 		
 		mv.addObject("species", species);
 		mv.addObject("evolution", evolution);
+		mv.addObject("moves", moves);
 		return mv;
 	}
 	

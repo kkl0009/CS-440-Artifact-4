@@ -7,6 +7,10 @@
 <b th:if="${species.type2}">Type 2: </b> <span th:if="${species.type2}" th:text="${species.type2}"></span><br>
 <b th:if="${evolution}">Evolves into: </b> <a th:if="${evolution}" th:href="'/species?pokedexNum=' + ${evolution.pokedexNum}" th:text="${evolution.name}"></a><span th:unless="${evolution}">Does not evolve</span><br>
 <br>
+<b>Learnable Moves:</b><br>
+<ul>
+	<li th:each="move : ${moves}" th:text="${move.name}"></li>
+</ul>
 <a th:href="'/editSpecies?pokedexNum=' + ${species.pokedexNum}">Edit</a><br>
 <a th:href="'/deleteSpecies?pokedexNum=' + ${species.pokedexNum}">Delete</a><br>
 <a href="/pokemon">Back to Pokemon List</a>
