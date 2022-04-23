@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1><b th:text="${trainer.name}"></b></h1><br>
+<b>Reward Money: </b><span th:text="${trainer.rewardMoney}"></span><br><br>
+<h2>Team:</h2>
+<div th:each="ps,iterStat : ${pokemonAndSpecies}">
+	<a th:text="${ps.species.name}" th:href="'/species?pokedexNum=' + ${ps.species.pokedexNum}"></a><br>
+	<b>Level: </b><span th:text="${ps.pokemon.level}"></span><br>
+	<b>Nature: </b><span th:text="${ps.pokemon.nature}"></span><br>
+	<b>Ability: </b><span th:text="${ps.pokemon.ability}"></span><br>
+	<b>HP: </b><span th:text="${ps.pokemon.hp}"></span><br>
+	<b>ATK: </b><span th:text="${ps.pokemon.atk}"></span><br>
+	<b>DEF: </b><span th:text="${ps.pokemon.def}"></span><br>
+	<b>SPD: </b><span th:text="${ps.pokemon.spd}"></span><br>
+	<b>SPC: </b><span th:text="${ps.pokemon.spc}"></span><br>
+	<b>Moves:</b>
+	<ul>
+		<li th:each="m : ${moves[iterStat.index]}"><a th:href="'/viewMove?id=' + ${m.id}" th:text="${m.name}"></a></li>
+	</ul><br><br>
+</div>
+</body>
+</html>

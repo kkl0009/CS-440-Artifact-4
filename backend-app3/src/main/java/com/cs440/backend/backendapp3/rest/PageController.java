@@ -1,6 +1,7 @@
 package com.cs440.backend.backendapp3.rest;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cs440.backend.backendapp3.objects.Area;
 import com.cs440.backend.backendapp3.objects.Move;
+import com.cs440.backend.backendapp3.objects.Pokemon;
+import com.cs440.backend.backendapp3.objects.PokemonAndSpecies;
 import com.cs440.backend.backendapp3.objects.Species;
 import com.cs440.backend.backendapp3.objects.SpeciesAndSpawnRate;
 import com.cs440.backend.backendapp3.objects.Trainer;
@@ -26,6 +29,15 @@ public class PageController {
 		List<Area> areas = DatabaseController.getAllAreas();
 		
 		mv.addObject("areas", areas);
+		return mv;
+	}
+	
+	@GetMapping("/trainers")
+	public ModelAndView trainers() throws SQLException {
+		ModelAndView mv = new ModelAndView("trainers");
+		List<Trainer> trainers = DatabaseController.getAllTrainers();
+		
+		mv.addObject("trainers", trainers);
 		return mv;
 	}
 	
@@ -43,6 +55,22 @@ public class PageController {
 		mv.addObject("landmarks", landmarks);
 		mv.addObject("spawns", spawns);
 		mv.addObject("trainers", trainers);
+		return mv;
+	}
+	
+	@GetMapping("/viewTrainer")
+	public ModelAndView viewTrainer(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		ModelAndView mv = new ModelAndView("viewTrainer");
+		Trainer trainer = DatabaseController.getTrainer(id);
+		List<PokemonAndSpecies> pokemonAndSpecies = DatabaseController.getTrainerPokemonAndSpecies(id);
+		List<List<Move>> moves = new LinkedList<List<Move>>();
+		for (PokemonAndSpecies p : pokemonAndSpecies) {
+			moves.add(DatabaseController.getKnownMoves(p.getPokemon().getId()));
+		}
+		
+		mv.addObject("trainer", trainer);
+		mv.addObject("pokemonAndSpecies", pokemonAndSpecies);
+		mv.addObject("moves", moves);
 		return mv;
 	}
 	

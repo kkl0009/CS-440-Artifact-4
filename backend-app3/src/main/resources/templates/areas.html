@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-AREA LIST<br><br>
+AREAS<br><br>
 <div th:each="area : ${areas}"><a th:href="'/viewArea?id=' + ${area.id}" th:text="${area.name}"></a><br></div> 
 </body>
 </html>

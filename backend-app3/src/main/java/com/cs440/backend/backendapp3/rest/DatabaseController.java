@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cs440.backend.backendapp3.objects.Area;
 import com.cs440.backend.backendapp3.objects.Move;
+import com.cs440.backend.backendapp3.objects.Pokemon;
+import com.cs440.backend.backendapp3.objects.PokemonAndSpecies;
 import com.cs440.backend.backendapp3.objects.Species;
 import com.cs440.backend.backendapp3.objects.SpeciesAndSpawnRate;
 import com.cs440.backend.backendapp3.objects.Trainer;
@@ -163,6 +165,55 @@ public class DatabaseController {
 		return trainers;
 	}
 	
+	public static Trainer getTrainer(int id) throws SQLException {
+		String query = "SELECT * FROM TRAINER WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		if (rs.next()) {
+			return new Trainer(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
+		}
+		else return null;
+	}
+	
+	public static List<Pokemon> getTrainerPokemon(int id) throws SQLException {
+		String query = "SELECT * FROM POKEMON WHERE TRAINERID = ?";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<Pokemon> p = new LinkedList<Pokemon>();
+		while (rs.next()) {
+			p.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9),  rs.getInt(10), rs.getInt(11)));
+		}
+		return p;
+	}
+	
+	public static List<PokemonAndSpecies> getTrainerPokemonAndSpecies(int id) throws SQLException {
+		String query = "SELECT POKEMON.*, SPECIES.* FROM POKEMON, SPECIES WHERE TRAINERID = ? AND SPECIESNUM = POKEDEXNUM";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<PokemonAndSpecies> ps = new LinkedList<PokemonAndSpecies>();
+		while (rs.next()) {
+			Pokemon p = new Pokemon(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9),  rs.getInt(10), rs.getInt(11));
+			Species s  = new Species(rs.getInt(12), rs.getString(13), rs.getString(14), rs.getString(15), rs.getInt(16));
+			ps.add(new PokemonAndSpecies(p, s));
+		}
+		return ps;
+	}
+	
+	public static List<Move> getKnownMoves(int id) throws SQLException {
+		String query = "SELECT MOVE.* FROM MOVE, KNOWN_MOVES WHERE KNOWN_MOVES.POKEMONID = ? AND KNOWN_MOVES.MOVEID = MOVE.ID";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<Move> moves = new LinkedList<Move>();
+		while (rs.next()) {
+			moves.add(new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6)));
+		}
+		return moves;
+	}
+	
 	public static Species getSpecies(int pokedexNum) throws SQLException {
 		String query = "SELECT * FROM SPECIES WHERE POKEDEXNUM = ?";
 		PreparedStatement prep = con.prepareStatement(query);
@@ -175,7 +226,7 @@ public class DatabaseController {
 	}
 	
 	public static List<Move> getLearnableMoves(int pokedexNum) throws SQLException {
-		String query = "SELECT MOVE.* FROM MOVE, CAN_LEARN, SPECIES WHERE SPECIES.POKEDEXNUM = ? AND CAN_LEARN.SPECIESNUM = SPECIES.POKEDEXNUM AND CAN_LEARN.MOVEID = MOVE.ID";
+		String query = "SELECT MOVE.* FROM MOVE, CAN_LEARN WHERE CAN_LEARN.SPECIESNUM = ? AND CAN_LEARN.MOVEID = MOVE.ID";
 		PreparedStatement prep = con.prepareStatement(query);
 		prep.setInt(1, pokedexNum);
 		ResultSet rs = prep.executeQuery();
@@ -240,6 +291,16 @@ public class DatabaseController {
 			prep.setInt(5, s.getEvolutionNum());
 		}
 		prep.executeUpdate();
+	}
+	
+	public static List<Trainer> getAllTrainers() throws SQLException {
+		String query = "SELECT * FROM TRAINER ORDER BY ID";
+		ResultSet rs = executeQuery(query);
+		List<Trainer> t = new LinkedList<Trainer>();
+		while (rs.next()) {
+			t.add(new Trainer(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
+		}
+		return t;
 	}
 	
 }

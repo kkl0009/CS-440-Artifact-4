@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+TRAINERS<br><br>
+<div th:each="trainer : ${trainers}"><a th:href="'/viewTrainer?id=' + ${trainer.id}" th:text="${trainer.name}"></a><br></div> 
+</body>
+</html>
