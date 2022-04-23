@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1><b th:text="${area.name}"></b></h1><br>
+<b>Type: </b><span th:text="${area.terrain}"></span><br><br>
+<b>Adjacent Areas:</b><br>
+<ul>
+	<li th:each="a : ${adjacentAreas}"><a th:href="'/viewArea?id=' + ${a.id}" th:text="${a.name}"></a></li>
+</ul><br><br>
+<b>Landmarks:</b><br>
+<ul>
+	<li th:each="landmark : ${landmarks}" th:text="${landmark}"></li>
+</ul><br><br>
+<b>Wild Pokemon Spawnrates:</b><br>
+<ul>
+	<li th:each="spawn : ${spawns}"><a th:href="'/species?pokedexNum=' + ${spawn.species.pokedexNum}" th:text="${spawn.species.name}"></a>: <span th:text="${spawn.spawnRate} + '%'"></span></li>
+</ul><br><br>
+<b>Trainers:</b><br>
+<ul>
+	<li th:each="trainer : ${trainers}"><a th:href="'/viewTrainer?id=' + ${trainer.id}" th:text="${trainer.name}"></a></li>
+</ul><br><br>
+</body>
+</html>

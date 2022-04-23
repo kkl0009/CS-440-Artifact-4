@@ -11,15 +11,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cs440.backend.backendapp3.objects.Area;
 import com.cs440.backend.backendapp3.objects.Move;
 import com.cs440.backend.backendapp3.objects.Species;
+import com.cs440.backend.backendapp3.objects.SpeciesAndSpawnRate;
+import com.cs440.backend.backendapp3.objects.Trainer;
 
 @Controller
 public class PageController {
 
 	@GetMapping("/areas")
-	public String areas() {
-		return "areas";
+	public ModelAndView areas() throws SQLException {
+		ModelAndView mv = new ModelAndView("areas");
+		List<Area> areas = DatabaseController.getAllAreas();
+		
+		mv.addObject("areas", areas);
+		return mv;
+	}
+	
+	@GetMapping("/viewArea")
+	public ModelAndView viewArea(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		ModelAndView mv = new ModelAndView("viewArea");
+		Area area = DatabaseController.getArea(id);
+		List<Area> adjacentAreas = DatabaseController.getAdjacentAreas(id);
+		List<String> landmarks = DatabaseController.getLandmarks(id);
+		List<SpeciesAndSpawnRate> spawns = DatabaseController.getSpawns(id);
+		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
+		
+		mv.addObject("area", area);
+		mv.addObject("adjacentAreas", adjacentAreas);
+		mv.addObject("landmarks", landmarks);
+		mv.addObject("spawns", spawns);
+		mv.addObject("trainers", trainers);
+		return mv;
 	}
 	
 	@GetMapping("/pokemon")
