@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,6 +79,17 @@ public class DatabaseController {
 		return stmt.executeQuery(query);
 	}
 	
+	public static List<Species> getAllSpecies() throws SQLException {
+		final String query = "SELECT * FROM SPECIES";
+		ResultSet rs = executeQuery(query);
+		
+		LinkedList<Species> returnList = new LinkedList<Species>();
+		while (rs.next()) {
+			returnList.add(new Species(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
+		}
+		return returnList;
+	}
+	
 	public static Species getSpecies(int pokedexNum) throws SQLException {
 		String query = "SELECT * FROM SPECIES WHERE POKEDEXNUM = ?";
 		PreparedStatement prep = con.prepareStatement(query);
@@ -88,4 +100,61 @@ public class DatabaseController {
 		}
 		else return null;
 	}
+	
+	public static void deleteSpecies(int pokedexNum) throws SQLException {
+		String delete = "DELETE FROM SPECIES WHERE POKEDEXNUM = ?";
+		PreparedStatement prep = con.prepareStatement(delete);
+		prep.setInt(1, pokedexNum);
+		prep.executeUpdate();
+	}
+	
+	public static void updateSpecies(Species s) throws SQLException {
+		String update = "UPDATE SPECIES SET NAME = ?, TYPE1 = ?, TYPE2 = ?, EVOLUTIONNUM = ? WHERE POKEDEXNUM = ?";
+		PreparedStatement prep = con.prepareStatement(update);
+		prep.setString(1, s.getName());
+		prep.setString(2, s.getType1());
+		if (s.getType2() == null || s.getType2() == "") {
+			prep.setNull(3, Types.VARCHAR);
+		}
+		else {
+			prep.setString(3, s.getType2());
+		}
+		if (s.getEvolutionNum() == 0) {
+			prep.setNull(4, Types.INTEGER);
+		}
+		else {
+			prep.setInt(4, s.getEvolutionNum());
+		}
+		prep.setInt(5, s.getPokedexNum());
+		prep.executeUpdate();
+	}
+	
+	public static int getNextPokedexNum() throws SQLException {
+		String query = "SELECT MAX(POKEDEXNUM) FROM SPECIES";
+		ResultSet rs = executeQuery(query);
+		rs.next();
+		return rs.getInt(1) + 1;
+	}
+	
+	public static void addSpecies(Species s) throws SQLException {
+		String insert = "INSERT INTO SPECIES VALUES (?, ?, ?, ?, ?)";
+		PreparedStatement prep = con.prepareStatement(insert);
+		prep.setInt(1, s.getPokedexNum());
+		prep.setString(2, s.getName());
+		prep.setString(3, s.getType1());
+		if (s.getType2() == null || s.getType2() == "") {
+			prep.setNull(4, Types.VARCHAR);
+		}
+		else {
+			prep.setString(4, s.getType2());
+		}
+		if (s.getEvolutionNum() == 0) {
+			prep.setNull(5, Types.INTEGER);
+		}
+		else {
+			prep.setInt(5, s.getEvolutionNum());
+		}
+		prep.executeUpdate();
+	}
+	
 }

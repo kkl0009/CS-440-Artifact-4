@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body onload="populate()">
+<body>
 <b>Name: </b> <span th:text="${species.name}"></span><br>
 <b>Pokedex Number: </b> <span th:text="${species.pokedexNum}"></span><br>
 <b>Type 1: </b> <span th:text="${species.type1}"></span><br>
 <b th:if="${species.type2}">Type 2: </b> <span th:if="${species.type2}" th:text="${species.type2}"></span><br>
 <b th:if="${evolution}">Evolves into: </b> <a th:if="${evolution}" th:href="'/species?pokedexNum=' + ${evolution.pokedexNum}" th:text="${evolution.name}"></a><span th:unless="${evolution}">Does not evolve</span><br>
 <br>
+<a th:href="'/editSpecies?pokedexNum=' + ${species.pokedexNum}">Edit</a><br>
+<a th:href="'/deleteSpecies?pokedexNum=' + ${species.pokedexNum}">Delete</a><br>
 <a href="/pokemon">Back to Pokemon List</a>
 
 </body>

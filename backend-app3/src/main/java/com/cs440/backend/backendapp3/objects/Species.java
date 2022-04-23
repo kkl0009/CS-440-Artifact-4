@@ -8,6 +8,14 @@ public class Species {
 	private String type2;
 	private int evolutionNum;
 	
+	public Species() {
+		this.pokedexNum = 0;
+		this.name = null;
+		this.type1 = null;
+		this.type2 = null;
+		this.evolutionNum = 0;
+	}
+	
 	public Species(int pokedexNum, String name, String type1, String type2, int evolutionNum) {
 		this.pokedexNum = pokedexNum;
 		this.name = name;

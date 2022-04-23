@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<b>Pokedex Number: </b> <span th:text="${species.pokedexNum}"></span><br>
+<form id="editForm" th:action="@{/editSpecies}" th:object="${species}" method="POST">
+	<input type="hidden" name="pokedexNum" th:value="${species.pokedexNum}" th:field="*{pokedexNum}">
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name" th:value="${species.name}" th:field="*{name}"><br>
+	<label for="type1">Type 1:</label><br>
+	<input type="text" id="type1" name="type1" th:value="${species.type1}" th:field="*{type1}"><br>
+	<label for="type2">Type 2:</label><br>
+	<input type="text" id="type2" name="type2" th:value="${species.type2}" th:field="*{type2}"><br>
+	<label for="evolution">Evolves into:</label><br>
+	<select name="evolution" id="evolution" th:field="*{evolutionNum}">
+		<option value="0" th:selected="${species.evolutionNum==0}">Does not evolve</option>
+		<option th:each="spc : ${allSpecies}" th:value="${spc.pokedexNum}" th:text="${spc.name}" th:selected="${spc.pokedexNum==species.evolutionNum}"></option>
+	</select>
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="'window.location.href=&quot;/species?pokedexNum=' + ${species.pokedexNum} + '&quot;'">Cancel</button>
+</form>
+
+
+</body>
+</html>
