@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.cs440.backend.backendapp3.objects.Area;
+import com.cs440.backend.backendapp3.objects.Species;
 import com.cs440.backend.backendapp3.objects.SpeciesAndSpawnRate;
 
 public class AreaManager {
@@ -101,6 +103,32 @@ public class AreaManager {
 		prep.setInt(1, areaId);
 		prep.setString(2, landmarkName);
 		prep.executeUpdate();
+	}
+	
+	public static List<SpeciesAndSpawnRate> getSpeciesAndSpawnRateInArea(int areaId) throws SQLException {
+		String get = "SELECT * FROM SPAWNS_IN JOIN SPECIES ON SPECIESNUM = POKEDEXNUM WHERE AREAID = ?";
+		PreparedStatement prep = CONNECTION.prepareStatement(get);
+		prep.setInt(1, areaId);
+		
+		List<SpeciesAndSpawnRate> result = new LinkedList<>();
+		ResultSet rs = prep.executeQuery();
+		while (rs.next()) {
+			SpeciesAndSpawnRate combined = new SpeciesAndSpawnRate(
+					rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getInt(8), 
+					rs.getFloat(3));
+			result.add(combined);
+		}
+		
+		return result;
+	}
+	
+	public static void deleteSpeciesAndSpawnRate(int areaId, int pokedexNum) throws SQLException {
+		String delete = "DELETE FROM SPAWNS_IN WHERE AREAID = ? AND SPECIESNUM = ?";
+		PreparedStatement prep = CONNECTION.prepareStatement(delete);
+		prep.setInt(1, areaId);
+		prep.setInt(2, pokedexNum);
+		prep.executeUpdate();
+		return;
 	}
 	
 }
