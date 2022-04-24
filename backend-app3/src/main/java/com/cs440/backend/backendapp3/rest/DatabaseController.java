@@ -302,6 +302,13 @@ public class DatabaseController {
 		prep.setInt(6, m.getId());
 		prep.executeUpdate();
 	}
+	
+	public static void deleteMove(int id) throws SQLException {
+		String delete = "DELETE FROM MOVE WHERE ID = ?";
+		PreparedStatement prep = CONNECTION.prepareStatement(delete);
+		prep.setInt(1, id);
+		prep.executeUpdate();
+	}
 			
 	public static List<Trainer> getAllTrainers() throws SQLException {
 		String query = "SELECT * FROM TRAINER ORDER BY ID";

@@ -369,4 +369,10 @@ public class PageController {
 		DatabaseController.updateMove(move);
 		return viewMove(move.getId());
 	}
+	
+	@GetMapping("/deleteMove")
+	public ModelAndView deleteMove(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		DatabaseController.deleteMove(id);
+		return moves();
+	}
 }

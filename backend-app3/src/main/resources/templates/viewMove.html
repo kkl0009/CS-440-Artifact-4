@@ -11,5 +11,7 @@
 	<li th:each="species : ${learnableSpecies}"><a th:href="'/species?pokedexNum=' + ${species.pokedexNum}" th:text="${species.name}"></a></li>
 </ul><br><br>
 <a th:href="'/editMove?id=' + ${move.id}">Edit</a><br>
+<a th:href="'/deleteMove?id=' + ${move.id}">Delete</a><br>
+<a href="/moves">Back to Moves List</a>
 </body>
 </html>
