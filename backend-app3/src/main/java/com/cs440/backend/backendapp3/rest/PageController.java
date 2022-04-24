@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cs440.backend.backendapp3.database.AreaManager;
+import com.cs440.backend.backendapp3.database.SpeciesManager;
 import com.cs440.backend.backendapp3.objects.Area;
 import com.cs440.backend.backendapp3.objects.KnownMove;
 import com.cs440.backend.backendapp3.objects.Move;
@@ -126,6 +127,17 @@ public class PageController {
 	@PostMapping("/deleteSpeciesAndSpawnRate")
 	public ModelAndView deleteSpeciesAndSpawnRate(int areaId, int pokedexNum, Model model) throws SQLException {
 		AreaManager.deleteSpeciesAndSpawnRate(areaId, pokedexNum);
+		return editSpeciesAndSpawnRates(areaId, model);
+	}
+	
+	@PostMapping("/addSpeciesAndSpawnRate")
+	public ModelAndView addSpeciesAndSpawnRate(int areaId, String speciesName, float spawnRate, Model model) throws SQLException {
+		Species species = SpeciesManager.getSpeciesByName(speciesName);
+		
+		if (species != null) {
+			AreaManager.addSpeciesAndSpawnRate(areaId, species.getPokedexNum(), spawnRate);
+		}
+		
 		return editSpeciesAndSpawnRates(areaId, model);
 	}
 
