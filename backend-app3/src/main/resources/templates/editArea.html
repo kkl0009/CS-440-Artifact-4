@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form id="editForm" th:action="@{/updateArea}" th:object="${area}" method="POST">
+
+	<input type="hidden" name="id" th:value="${area.id}" th:field="*{id}">
+
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name" th:value="${area.name}" th:field="*{name}"><br>
+
+	<label for="terrain">Terrain:</label><br>
+	<input type="text" id="terrain" name="terrain" th:value="${area.terrain}" th:field="*{terrain}"><br>
+
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="'window.location.href=&quot;/viewArea?id=' + ${area.id} + '&quot;'">Cancel</button>
+	
+</form>
+
+
+</body>
+</html>
