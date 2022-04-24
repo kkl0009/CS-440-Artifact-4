@@ -3,5 +3,7 @@
 <body>
 TRAINERS<br><br>
 <div th:each="trainer : ${trainers}"><a th:href="'/viewTrainer?id=' + ${trainer.id}" th:text="${trainer.name}"></a><br></div> 
+<br><br>
+<a href="/addTrainer">Add Trainer</a>
 </body>
 </html>

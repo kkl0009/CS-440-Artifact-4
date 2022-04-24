@@ -9,7 +9,7 @@
 <br>
 <b>Learnable Moves:</b><br>
 <ul>
-	<li th:each="move : ${moves}" th:text="${move.name}"></li>
+	<li th:each="move : ${moves}"><a th:href="'/viewMove?id=' + ${move.id}" th:text="${move.name}"></a></li>
 </ul>
 <a th:href="'/editSpecies?pokedexNum=' + ${species.pokedexNum}">Edit</a><br>
 <a th:href="'/deleteSpecies?pokedexNum=' + ${species.pokedexNum}">Delete</a><br>

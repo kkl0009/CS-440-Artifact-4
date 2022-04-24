@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<form id="addForm" th:action="@{/addPokemon}" th:object="${pokemon}" method="POST">
+	<input type="hidden" name="id" th:value="${pokemon.id}" th:field="*{id}">
+	<input type="hidden" name="trainerId" th:value="${trainerId}" th:field="*{trainerId}">
+	<label for="species">Species:</label><br>
+	<select name="species" id="species" th:field="*{speciesNum}">
+		<option th:each="s : ${species}" th:value="${s.pokedexNum}" th:text="${s.name}"></option>
+	</select><br>
+	<label for="level">Level:</label><br>
+	<input type="text" id="level" name="level" th:field="*{level}"><br>
+	<label for="nature">Nature:</label><br>
+	<input type="text" id="nature" name="nature" th:field="*{nature}"><br>
+	<label for="ability">Ability:</label><br>
+	<input type="text" id="ability" name="ability" th:field="*{ability}"><br>
+	
+	<label for="hp">HP:</label><br>
+	<input type="text" id="hp" name="hp" th:field="*{hp}"><br>
+	<label for="atk">ATK:</label><br>
+	<input type="text" id="atk" name="atk" th:field="*{atk}"><br>
+	<label for="def">DEF:</label><br>
+	<input type="text" id="def" name="def" th:field="*{def}"><br>
+	<label for="spd">SPD:</label><br>
+	<input type="text" id="spd" name="spd" th:field="*{spd}"><br>
+	<label for="spc">SPC:</label><br>
+	<input type="text" id="spc" name="spc" th:field="*{spc}"><br>
+	
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="'window.location.href=&quot;/viewTrainer?id=' + ${trainerId} + '&quot;'">Cancel</button>
+</form>
+
+</body>
+</html>

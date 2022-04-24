@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cs440.backend.backendapp3.objects.Area;
+import com.cs440.backend.backendapp3.objects.KnownMove;
 import com.cs440.backend.backendapp3.objects.Move;
 import com.cs440.backend.backendapp3.objects.Pokemon;
 import com.cs440.backend.backendapp3.objects.PokemonAndSpecies;
@@ -265,11 +266,69 @@ public class DatabaseController {
 		prep.executeUpdate();
 	}
 	
+	public static void deleteTrainer(int id) throws SQLException {
+		String delete = "DELETE FROM TRAINER WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(delete);
+		prep.setInt(1, id);
+		prep.executeUpdate();
+	}
+	
+	public static void updateTrainer(Trainer t) throws SQLException {
+		String update = "UPDATE TRAINER SET NAME = ?, REWARDMONEY = ?, LOCATIONID = ? WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(update);
+		prep.setString(1, t.getName());
+		prep.setInt(2, t.getRewardMoney());
+		prep.setInt(3,  t.getLocationId());
+		prep.setInt(4, t.getId());
+		prep.executeUpdate();
+	}
+	
 	public static int getNextPokedexNum() throws SQLException {
 		String query = "SELECT MAX(POKEDEXNUM) FROM SPECIES";
 		ResultSet rs = executeQuery(query);
 		rs.next();
 		return rs.getInt(1) + 1;
+	}
+	
+	public static int getNextTrainerId() throws SQLException {
+		String query = "SELECT MAX(ID) FROM TRAINER";
+		ResultSet rs = executeQuery(query);
+		rs.next();
+		return rs.getInt(1) + 1;
+	}
+	
+	public static int getNextPokemonId() throws SQLException {
+		String query = "SELECT MAX(ID) FROM POKEMON";
+		ResultSet rs = executeQuery(query);
+		rs.next();
+		return rs.getInt(1) + 1;
+	}
+	
+	public static void addTrainer(Trainer t) throws SQLException {
+		String insert = "INSERT INTO TRAINER VALUES (?, ?, ?, ?)";
+		PreparedStatement prep = con.prepareStatement(insert);
+		prep.setInt(1, t.getId());
+		prep.setString(2, t.getName());
+		prep.setInt(3, t.getRewardMoney());
+		prep.setInt(4, t.getLocationId());
+		prep.executeUpdate();
+	}
+	
+	public static void addPokemon(Pokemon p) throws SQLException {
+		String insert = "INSERT INTO POKEMON VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement prep = con.prepareStatement(insert);
+		prep.setInt(1, p.getId());
+		prep.setInt(2, p.getLevel());
+		prep.setString(3, p.getNature());
+		prep.setString(4, p.getAbility());
+		prep.setInt(5, p.getHp());
+		prep.setInt(6, p.getAtk());
+		prep.setInt(7, p.getDef());
+		prep.setInt(8, p.getSpd());
+		prep.setInt(9, p.getSpc());
+		prep.setInt(10, p.getTrainerId());
+		prep.setInt(11, p.getSpeciesNum());
+		prep.executeUpdate();
 	}
 	
 	public static void addSpecies(Species s) throws SQLException {
@@ -301,6 +360,66 @@ public class DatabaseController {
 			t.add(new Trainer(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
 		}
 		return t;
+	}
+	
+	public static Pokemon getPokemon(int id) throws SQLException {
+		String query = "SELECT * FROM POKEMON WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		if (rs.next()) {
+			return new Pokemon(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9),  rs.getInt(10), rs.getInt(11));
+		}
+		else return null;
+	}
+	
+	public static void updatePokemon(Pokemon p) throws SQLException {
+		String update = "UPDATE POKEMON SET POKEMONLEVEL = ?, NATURE = ?, ABILITY = ?, HP = ?, ATK = ?, DEF = ?, SPD = ?, SPC = ?, SPECIESNUM = ? WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(update);
+		prep.setInt(1, p.getLevel());
+		prep.setString(2, p.getNature());
+		prep.setString(3, p.getAbility());
+		prep.setInt(4, p.getHp());
+		prep.setInt(5, p.getAtk());
+		prep.setInt(6, p.getDef());
+		prep.setInt(7, p.getSpd());
+		prep.setInt(8, p.getSpc());
+		prep.setInt(9, p.getSpeciesNum());
+		prep.setInt(10, p.getId());
+		prep.executeUpdate();
+	}
+	
+	public static void deletePokemon(int id) throws SQLException {
+		String delete = "DELETE FROM POKEMON WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(delete);
+		prep.setInt(1, id);
+		prep.executeUpdate();
+	}
+	
+	public static List<Move> getAllMoves() throws SQLException {
+		String query = "SELECT * FROM MOVE ORDER BY ID";
+		ResultSet rs = executeQuery(query);
+		List<Move> m = new LinkedList<Move>();
+		while (rs.next()) {
+			m.add(new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6)));
+		}
+		return m;
+	}
+	
+	public static void addKnownMove(KnownMove km) throws SQLException {
+		String insert = "INSERT INTO KNOWN_MOVES VALUES (?, ?)";
+		PreparedStatement prep = con.prepareStatement(insert);
+		prep.setInt(1, km.getPokemonId());
+		prep.setInt(2, km.getMoveId());
+		prep.executeUpdate();
+	}
+	
+	public static void deleteKnownMove(int pokemonId, int moveId) throws SQLException {
+		String delete = "DELETE FROM KNOWN_MOVES WHERE POKEMONID = ? AND MOVEID = ?";
+		PreparedStatement prep = con.prepareStatement(delete);
+		prep.setInt(1, pokemonId);
+		prep.setInt(2, moveId);
+		prep.executeUpdate();
 	}
 	
 }
