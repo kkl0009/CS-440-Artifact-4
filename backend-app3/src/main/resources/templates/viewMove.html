@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1><b th:text="${move.name}"></b></h1><br>
+<b>Power: </b><span th:text="${move.power}"></span><br>
+<b>Accuracy: </b><span th:text="${move.accuracy}"></span><br>
+<b>Type: </b><span th:text="${move.type}"></span><br>
+<b>Description: </b><span th:text="${move.description}"></span><br><br>
+<b>Pokemon who can learn this move:</b><br>
+<ul>
+	<li th:each="species : ${learnableSpecies}"><a th:href="'/species?pokedexNum=' + ${species.pokedexNum}" th:text="${species.name}"></a></li>
+</ul><br><br>
+</body>
+</html>

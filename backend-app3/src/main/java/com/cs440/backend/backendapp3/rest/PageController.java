@@ -131,4 +131,31 @@ public class PageController {
 		return mv;
 	}
 	
+	@GetMapping("/moves")
+	public ModelAndView moves() throws SQLException {
+		ModelAndView mv = new ModelAndView("moves");
+		List<Move> moves = DatabaseController.getAllMoves();
+		
+		mv.addObject("moves", moves);
+		return mv;
+	}
+	
+	@GetMapping("/viewMove")
+	public ModelAndView viewMove(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		ModelAndView mv = new ModelAndView("viewMove");
+		Move move = DatabaseController.getMove(id);
+		List<Species> learnableSpecies = DatabaseController.getLearnableSpecies(id);
+//		List<Move> adjacentAreas = DatabaseController.getAdjacentAreas(id);
+//		List<String> landmarks = DatabaseController.getLandmarks(id);
+//		List<SpeciesAndSpawnRate> spawns = DatabaseController.getSpawns(id);
+//		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
+		
+		mv.addObject("move", move);
+		mv.addObject("learnableSpecies", learnableSpecies);
+//		mv.addObject("adjacentAreas", adjacentAreas);
+//		mv.addObject("landmarks", landmarks);
+//		mv.addObject("spawns", spawns);
+//		mv.addObject("trainers", trainers);
+		return mv;
+	}
 }

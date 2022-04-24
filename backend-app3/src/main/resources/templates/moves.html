@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+MOVE LIST<br><br>
+<div th:each="move : ${moves}"><a th:href="'/viewMove?id=' + ${move.id}" th:text="${move.name}"></a><br></div> 
+</body>
+</html>

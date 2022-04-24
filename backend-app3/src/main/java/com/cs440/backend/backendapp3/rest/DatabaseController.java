@@ -242,4 +242,37 @@ public class DatabaseController {
 		prep.executeUpdate();
 	}
 	
+	public static List<Move> getAllMoves() throws SQLException {
+		String query = "SELECT * FROM MOVE ORDER BY ID";
+		ResultSet rs = executeQuery(query);
+		LinkedList<Move> moves = new LinkedList<Move>();
+		while (rs.next()) {
+			moves.add(new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6)));
+		}
+		return moves;
+	}
+	
+	public static Move getMove(int id) throws SQLException {
+		String query = "SELECT * FROM MOVE WHERE ID = ?";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		if (rs.next()) {
+			return new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6));
+		}
+		else return null;
+	}
+	
+	public static List<Species> getLearnableSpecies(int id) throws SQLException {
+		String query = "SELECT SPECIES.* FROM MOVE, CAN_LEARN, SPECIES WHERE MOVE.ID = ? AND CAN_LEARN.MOVEID = MOVE.ID AND CAN_LEARN.SPECIESNUM = SPECIES.POKEDEXNUM";
+		PreparedStatement prep = con.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<Species> species = new LinkedList<Species>();
+		while (rs.next()) {
+			species.add(new Species(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
+		}
+		return species;
+	}
+	
 }
