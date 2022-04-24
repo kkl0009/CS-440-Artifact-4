@@ -392,4 +392,22 @@ public class PageController {
 		DatabaseController.deleteMove(id);
 		return moves();
 	}
+	
+	@GetMapping("/addMove")
+	public ModelAndView addMove() throws SQLException {
+		ModelAndView mv = new ModelAndView("addMove");
+		int id = DatabaseController.getNextMoveId();
+		List<Move> allMoves = DatabaseController.getAllMoves();
+		Move move = new Move();
+		move.setId(id);
+		mv.addObject("move", move);
+		mv.addObject("allMoves", allMoves);
+		return mv;
+	}
+	
+	@PostMapping("/addMove")
+	public ModelAndView submitAddMoves(@ModelAttribute Move move, Model model) throws SQLException {
+		DatabaseController.addMove(move);
+		return viewMove(move.getId());
+	}
 }

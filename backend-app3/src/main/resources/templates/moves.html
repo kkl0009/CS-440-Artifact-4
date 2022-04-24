@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 MOVE LIST<br><br>
-<div th:each="move : ${moves}"><a th:href="'/viewMove?id=' + ${move.id}" th:text="${move.name}"></a><br></div> 
+<div th:each="move : ${moves}"><a th:href="'/viewMove?id=' + ${move.id}" th:text="${move.name}"></a><br></div><br><br>
+<a href="/addMove">Add a new move</a>
 </body>
 </html>

@@ -222,6 +222,13 @@ public class DatabaseController {
 		return rs.getInt(1) + 1;
 	}
 	
+	public static int getNextMoveId() throws SQLException {
+		String query = "SELECT MAX(ID) FROM MOVE";
+		ResultSet rs = executeQuery(query);
+		rs.next();
+		return rs.getInt(1) + 1;
+	}
+	
 	public static void addTrainer(Trainer t) throws SQLException {
 		String insert = "INSERT INTO TRAINER VALUES (?, ?, ?, ?)";
 		PreparedStatement prep = CONNECTION.prepareStatement(insert);
@@ -307,6 +314,18 @@ public class DatabaseController {
 		String delete = "DELETE FROM MOVE WHERE ID = ?";
 		PreparedStatement prep = CONNECTION.prepareStatement(delete);
 		prep.setInt(1, id);
+		prep.executeUpdate();
+	}
+	
+	public static void addMove(Move s) throws SQLException {
+		String insert = "INSERT INTO MOVE VALUES (?, ?, ?, ?, ?, ?)";
+		PreparedStatement prep = CONNECTION.prepareStatement(insert);
+		prep.setInt(1, s.getId());
+		prep.setString(2, s.getName());
+		prep.setInt(3, s.getPower());
+		prep.setInt(4, s.getAccuracy());
+		prep.setString(5, s.getType());
+		prep.setString(6, s.getDescription());
 		prep.executeUpdate();
 	}
 			
