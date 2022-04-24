@@ -10,6 +10,11 @@ public class SpeciesAndSpawnRate {
 		spawnRate = 0;
 	}
 	
+	public SpeciesAndSpawnRate(Species species, float spawnRate) {
+		this.species = species;
+		this.spawnRate = spawnRate;
+	}
+	
 	public SpeciesAndSpawnRate(int pokedexNum, String name, String type1, String type2, int evolutionNum, float spawnRate) {
 		this.species = new Species(pokedexNum, name, type1, type2, evolutionNum);
 		this.spawnRate = spawnRate;

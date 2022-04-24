@@ -131,4 +131,13 @@ public class AreaManager {
 		return;
 	}
 	
+	public static void addSpeciesAndSpawnRate(int areaId, int pokedexNum, float spawnRate) throws SQLException {
+		String insert = "INSERT INTO SPAWNS_IN VALUES (?, ?, ?)";
+		PreparedStatement prep = CONNECTION.prepareStatement(insert);
+		prep.setInt(1, pokedexNum);
+		prep.setInt(2, areaId);
+		prep.setFloat(3, spawnRate);
+		prep.executeUpdate();
+	}
+	
 }
