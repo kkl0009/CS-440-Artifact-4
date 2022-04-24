@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    console.log(/*[[${trainer.id}]]*/);
+
+/*]]>*/
+</script>
+<h1><b th:text="${trainer.name}"></b></h1><br>
+<b>Reward Money: </b><span th:text="${trainer.rewardMoney}"></span><br><br>
+<h2>Team:</h2>
+<div th:each="ps,iterStat : ${pokemonAndSpecies}">
+	<a th:text="${ps.species.name}" th:href="'/species?pokedexNum=' + ${ps.species.pokedexNum}"></a><br>
+	<b>Level: </b><span th:text="${ps.pokemon.level}"></span><br>
+	<b>Nature: </b><span th:text="${ps.pokemon.nature}"></span><br>
+	<b>Ability: </b><span th:text="${ps.pokemon.ability}"></span><br>
+	<b>HP: </b><span th:text="${ps.pokemon.hp}"></span><br>
+	<b>ATK: </b><span th:text="${ps.pokemon.atk}"></span><br>
+	<b>DEF: </b><span th:text="${ps.pokemon.def}"></span><br>
+	<b>SPD: </b><span th:text="${ps.pokemon.spd}"></span><br>
+	<b>SPC: </b><span th:text="${ps.pokemon.spc}"></span><br>
+	<b>Moves:</b>
+	<ul>
+		<li th:each="m : ${moves[iterStat.index]}"><a th:href="'/viewMove?id=' + ${m.id}" th:text="${m.name}"></a> (<a th:href="'/deleteKnownMove?moveId=' + ${m.id} + '&pokemonId=' + ${ps.pokemon.id}">Delete</a>)</li>
+	</ul>
+	<a th:href="'/addKnownMove?id=' + ${ps.pokemon.id}">Add Move</a>
+	<a th:href="'/editPokemon?id=' + ${ps.pokemon.id}">Edit Pokemon</a>
+	<a th:href="'/deletePokemon?pId=' + ${ps.pokemon.id} + '&tId=' + ${trainer.id}">Delete Pokemon</a>
+	<br><br>
+</div><br><br>
+<a th:href="'/addPokemon?tId=' + ${trainer.id}">Add Pokemon</a>
+<a th:href="'/editTrainer?id=' + ${trainer.id}">Edit Trainer</a>
+<a th:href="'/deleteTrainer?id=' + ${trainer.id}">Delete Trainer</a>
+</body>
+</html>

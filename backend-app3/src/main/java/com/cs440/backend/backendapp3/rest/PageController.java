@@ -1,6 +1,7 @@
 package com.cs440.backend.backendapp3.rest;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cs440.backend.backendapp3.database.AreaManager;
 import com.cs440.backend.backendapp3.objects.Area;
+import com.cs440.backend.backendapp3.objects.KnownMove;
 import com.cs440.backend.backendapp3.objects.Move;
+import com.cs440.backend.backendapp3.objects.Pokemon;
+import com.cs440.backend.backendapp3.objects.PokemonAndSpecies;
 import com.cs440.backend.backendapp3.objects.Species;
 import com.cs440.backend.backendapp3.objects.SpeciesAndSpawnRate;
 import com.cs440.backend.backendapp3.objects.Trainer;
@@ -23,19 +28,36 @@ public class PageController {
 	@GetMapping("/areas")
 	public ModelAndView areas() throws SQLException {
 		ModelAndView mv = new ModelAndView("areas");
-		List<Area> areas = DatabaseController.getAllAreas();
+		List<Area> areas = AreaManager.getAllAreas();
 		
 		mv.addObject("areas", areas);
 		return mv;
 	}
 	
+	@GetMapping("/trainers")
+	public ModelAndView trainers() throws SQLException {
+		ModelAndView mv = new ModelAndView("trainers");
+		List<Trainer> trainers = DatabaseController.getAllTrainers();
+		
+		mv.addObject("trainers", trainers);
+		return mv;
+	}
+	
+	@GetMapping("/pokemon")
+	public String pokemon() {
+		return "pokemon";
+	}
+	
+	/**
+	 * AREAS
+	 */
 	@GetMapping("/viewArea")
 	public ModelAndView viewArea(@RequestParam(value = "id", required = true) int id) throws SQLException {
 		ModelAndView mv = new ModelAndView("viewArea");
-		Area area = DatabaseController.getArea(id);
-		List<Area> adjacentAreas = DatabaseController.getAdjacentAreas(id);
-		List<String> landmarks = DatabaseController.getLandmarks(id);
-		List<SpeciesAndSpawnRate> spawns = DatabaseController.getSpawns(id);
+		Area area = AreaManager.getArea(id);
+		List<Area> adjacentAreas = AreaManager.getAdjacentAreas(id);
+		List<String> landmarks = AreaManager.getLandmarks(id);
+		List<SpeciesAndSpawnRate> spawns = AreaManager.getSpawns(id);
 		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
 		
 		mv.addObject("area", area);
@@ -46,11 +68,192 @@ public class PageController {
 		return mv;
 	}
 	
-	@GetMapping("/pokemon")
-	public String pokemon() {
-		return "pokemon";
+	@GetMapping("/deleteArea")
+	public ModelAndView deleteArea(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		AreaManager.deleteArea(id);
+		return areas();
 	}
 	
+	@GetMapping("/editArea")
+	public ModelAndView editArea(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editArea");
+		Area area = AreaManager.getArea(id);
+		
+		mv.addObject("area", area);
+		return mv;
+	}
+	
+	@PostMapping("/updateArea")
+	public ModelAndView updateArea(@ModelAttribute Area area, Model model) throws SQLException {
+		AreaManager.updateArea(area);
+		return viewArea(area.getId());
+	}
+	
+	@GetMapping("/editLandmarks")
+	public ModelAndView editLandmarks(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editLandmarks");
+		Area area = AreaManager.getArea(id);
+		List<String> landmarks = AreaManager.getLandmarks(id);
+		
+		mv.addObject("area", area);
+		mv.addObject("landmarks", landmarks);
+		return mv;
+	}
+	
+	@PostMapping("/deleteLandmark")
+	public ModelAndView deleteLandmark(int id, String landmarkName, Model model) throws SQLException {
+		AreaManager.deleteLandmark(id, landmarkName);
+		return editLandmarks(id, model);
+	}
+	
+	@PostMapping("/addLandmark")
+	public ModelAndView addLandmark(int id, String landmarkName, Model model) throws SQLException {
+		AreaManager.addLandmark(id, landmarkName);
+		return editLandmarks(id, model);
+	}
+
+	/**
+	 * TRAINERS
+	 */
+	@GetMapping("/viewTrainer")
+	public ModelAndView viewTrainer(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		ModelAndView mv = new ModelAndView("viewTrainer");
+		Trainer trainer = DatabaseController.getTrainer(id);
+		List<PokemonAndSpecies> pokemonAndSpecies = DatabaseController.getTrainerPokemonAndSpecies(id);
+		List<List<Move>> moves = new LinkedList<List<Move>>();
+		for (PokemonAndSpecies p : pokemonAndSpecies) {
+			moves.add(DatabaseController.getKnownMoves(p.getPokemon().getId()));
+		}
+		
+		mv.addObject("trainer", trainer);
+		mv.addObject("pokemonAndSpecies", pokemonAndSpecies);
+		mv.addObject("moves", moves);
+		return mv;
+	}
+	
+	@GetMapping("/deleteTrainer")
+	public ModelAndView deleteTrainer(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		DatabaseController.deleteTrainer(id);
+		return trainers();
+	}
+	
+	@GetMapping("/editTrainer")
+	public ModelAndView editTrainer(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editTrainer");
+		Trainer trainer = DatabaseController.getTrainer(id);
+		List<Area> areas = AreaManager.getAllAreas();
+		
+		mv.addObject("trainer", trainer);
+		mv.addObject("areas", areas);
+		return mv;
+	}
+	
+	@PostMapping("/editTrainer")
+	public ModelAndView updateTrainer(@ModelAttribute Trainer trainer, Model model) throws SQLException {
+		DatabaseController.updateTrainer(trainer);
+		return viewTrainer(trainer.getId());
+	}
+	
+	@GetMapping("/addTrainer")
+	public ModelAndView addTrainer() throws SQLException {
+		ModelAndView mv = new ModelAndView("addTrainer");
+		int id = DatabaseController.getNextTrainerId();
+		List<Area> areas = AreaManager.getAllAreas();
+		Trainer trainer = new Trainer();
+		trainer.setId(id);
+		mv.addObject("trainer", trainer);
+		mv.addObject("areas", areas);
+		return mv;
+	}
+	
+	@PostMapping("/addTrainer")
+	public ModelAndView addNewTrainer(@ModelAttribute Trainer trainer, Model model) throws SQLException {
+		DatabaseController.addTrainer(trainer);
+		return viewTrainer(trainer.getId());
+	}
+	
+	
+	/**
+	 * POKEMON
+	 */
+	@GetMapping("/addPokemon")
+	public ModelAndView addPokemon(@RequestParam(value = "tId", required = true) int tId, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("addPokemon");
+		int id = DatabaseController.getNextPokemonId();
+		List<Species> species = DatabaseController.getAllSpecies();
+		Pokemon pokemon = new Pokemon();
+		pokemon.setId(id);
+		pokemon.setTrainerId(tId);
+		mv.addObject("pokemon", pokemon);
+		mv.addObject("species", species);
+		mv.addObject("trainerId", tId);
+		return mv;
+	}
+	
+	@PostMapping("/addPokemon")
+	public ModelAndView addNewPokemon(@ModelAttribute Pokemon pokemon, Model model) throws SQLException {
+		DatabaseController.addPokemon(pokemon);
+		return viewTrainer(pokemon.getTrainerId());
+	}
+	
+	@GetMapping("/editPokemon")
+	public ModelAndView editPokemon(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editPokemon");
+		Pokemon pokemon = DatabaseController.getPokemon(id);
+		List<Species> species = DatabaseController.getAllSpecies();
+		
+		mv.addObject("pokemon", pokemon);
+		mv.addObject("species", species);
+		return mv;
+	}
+	
+	@PostMapping("/editPokemon")
+	public ModelAndView updatePokemon(@ModelAttribute Pokemon pokemon, Model model) throws SQLException {
+		DatabaseController.updatePokemon(pokemon);
+		return viewTrainer(pokemon.getTrainerId());
+	}
+	
+	@GetMapping("/deletePokemon")
+	public ModelAndView deletePokemon(@RequestParam(value = "pId", required = true) int pId, @RequestParam(value = "tId", required = true) int tId) throws SQLException {
+		DatabaseController.deletePokemon(pId);
+		return viewTrainer(tId);
+	}
+	
+	
+	/**
+	 * MOVES
+	 */
+	@GetMapping("/addKnownMove")
+	public ModelAndView addKnownMove(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("addKnownMove");
+		int tId = DatabaseController.getPokemon(id).getTrainerId();
+		List<Move> moves = DatabaseController.getAllMoves();
+		KnownMove km = new KnownMove();
+		km.setPokemonId(id);
+		mv.addObject("km", km);
+		mv.addObject("moves", moves);
+		mv.addObject("tId", tId);
+		return mv;
+	}
+	
+	@PostMapping("/addKnownMove")
+	public ModelAndView addNewKnownMove(@ModelAttribute KnownMove km, Model model) throws SQLException {
+		DatabaseController.addKnownMove(km);
+		int tId = DatabaseController.getPokemon(km.getPokemonId()).getTrainerId();
+		return viewTrainer(tId);
+	}
+	
+	@GetMapping("/deleteKnownMove")
+	public ModelAndView deleteKnownMove(@RequestParam(value = "moveId", required = true) int moveId, @RequestParam(value = "pokemonId", required = true) int pokemonId) throws SQLException {
+		DatabaseController.deleteKnownMove(pokemonId, moveId);
+		int tId = DatabaseController.getPokemon(pokemonId).getTrainerId();
+		return viewTrainer(tId);
+	}
+	
+	
+	/**
+	 * SPECIES
+	 */
 	@GetMapping("/species")
 	public ModelAndView species(@RequestParam(value = "pokedexNum", required = true) int pokedexNum) throws SQLException {
 		ModelAndView mv = new ModelAndView("species");

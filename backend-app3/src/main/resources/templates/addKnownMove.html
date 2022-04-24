@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form id="addForm" th:action="@{/addKnownMove}" th:object="${km}" method="POST">
+	<input type="hidden" name="pokemonId" th:value="${km.pokemonId}" th:field="*{pokemonId}">
+	<label for="move">Move:</label><br>
+	<select name="move" id="move" th:field="*{moveId}">
+		<option th:each="m : ${moves}" th:value="${m.id}" th:text="${m.name}"></option>
+	</select>
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="'window.location.href=&quot;/viewTrainer?id=' + ${tId} + '&quot;'">Cancel</button>
+</form>
+
+</body>
+</html>

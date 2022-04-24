@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form id="addForm" th:action="@{/addTrainer}" th:object="${trainer}" method="POST">
+	<input type="hidden" name="id" th:value="${trainer.id}" th:field="*{id}">
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name" th:field="*{name}"><br>
+	<label for="rewardMoney">Reward Money:</label><br>
+	<input type="text" id="rewardMoney" name="rewardMoney" th:field="*{rewardMoney}"><br>
+	<label for="area">Located in:</label><br>
+	<select name="area" id="area" th:field="*{locationId}">
+		<option th:each="a : ${areas}" th:value="${a.id}" th:text="${a.name}"></option>
+	</select>
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="window.location.href='/trainers'">Cancel</button>
+</form>
+
+</body>
+</html>

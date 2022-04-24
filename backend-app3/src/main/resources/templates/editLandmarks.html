@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h3>Modify existing landmarks</h3>
+<li th:each="landmark : ${landmarks}">
+	<a th:text="${landmark}"></a> 
+	<form method="POST" th:action="@{/deleteLandmark}">
+	    <input type="hidden" name="id" th:value="${area.id}">
+	    <input type="hidden" name="landmarkName" th:value="${landmark}">
+
+	    <button type="submit">Delete</button>
+	</form> 
+</li>
+
+<h3>Add new landmark:</h3>
+<form method="POST" th:action="@{/addLandmark}">
+    <input type="hidden" name="id" th:value="${area.id}">
+    <input type="text" name="landmarkName">
+
+    <button type="submit">Add</button>
+</form> 
+
+<button type="button" value="Back" th:onclick="'window.location.href=&quot;/viewArea?id=' + ${area.id} + '&quot;'">Back to Area</button>
+
+</body>
+</html>
