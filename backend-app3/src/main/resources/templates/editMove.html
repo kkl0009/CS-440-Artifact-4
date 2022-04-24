@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form id="editForm" th:action="@{/editMove}" th:object="${move}" method="POST">
+
+	<input type="hidden" name="id" th:value="${move.id}" th:field="*{id}">
+	
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name" th:value="${move.name}" th:field="*{name}"><br>
+	
+	<label for="power">Power:</label><br>
+	<input type="text" id="power" name="type1" th:value="${move.power}" th:field="*{power}"><br>
+	
+	<label for="accuracy">Accuracy:</label><br>
+	<input type="text" id="accuracy" name="accuracy" th:value="${move.accuracy}" th:field="*{accuracy}"><br>
+	
+	<label for="type">Type:</label><br>
+	<input type="text" id="type" name="type" th:value="${move.type}" th:field="*{type}"><br>
+	
+	<label for="description">Description:</label><br>
+	<input type="text" id="description" name="description" th:value="${move.description}" th:field="*{description}"><br>
+	
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="'window.location.href=&quot;/viewMove?id=' + ${move.id} + '&quot;'">Cancel</button>
+</form>
+
+
+</body>
+</html>
