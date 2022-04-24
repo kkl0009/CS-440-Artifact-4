@@ -365,17 +365,25 @@ public class PageController {
 		ModelAndView mv = new ModelAndView("viewMove");
 		Move move = DatabaseController.getMove(id);
 		List<Species> learnableSpecies = DatabaseController.getLearnableSpecies(id);
-//		List<Move> adjacentAreas = DatabaseController.getAdjacentAreas(id);
-//		List<String> landmarks = DatabaseController.getLandmarks(id);
-//		List<SpeciesAndSpawnRate> spawns = DatabaseController.getSpawns(id);
-//		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
 		
 		mv.addObject("move", move);
 		mv.addObject("learnableSpecies", learnableSpecies);
-//		mv.addObject("adjacentAreas", adjacentAreas);
-//		mv.addObject("landmarks", landmarks);
-//		mv.addObject("spawns", spawns);
-//		mv.addObject("trainers", trainers);
 		return mv;
+	}
+	
+	@GetMapping("/editMove")
+	public ModelAndView editMove(@RequestParam(value = "id", required = true) int id) throws SQLException {
+		ModelAndView mv = new ModelAndView("editMove");
+		Move result = DatabaseController.getMove(id);
+		List<Move> allMoves = DatabaseController.getAllMoves();
+		mv.addObject("move", result);
+		mv.addObject("allMoves", allMoves);
+		return mv;
+	}
+	
+	@PostMapping("/editMove")
+	public ModelAndView updateMove(@ModelAttribute Move move, Model model) throws SQLException {
+		DatabaseController.updateMove(move);
+		return viewMove(move.getId());
 	}
 }

@@ -290,6 +290,18 @@ public class DatabaseController {
 		}
 		else return null;
 	}
+	
+	public static void updateMove(Move m) throws SQLException {
+		String update = "UPDATE MOVE SET NAME = ?, POWER = ?, ACCURACY = ?, TYPE = ?, DESCRIPTION = ? WHERE ID = ?";
+		PreparedStatement prep = CONNECTION.prepareStatement(update);
+		prep.setString(1, m.getName());
+		prep.setInt(2, m.getPower());
+		prep.setInt(3, m.getAccuracy());
+		prep.setString(4, m.getType());
+		prep.setString(5, m.getDescription());
+		prep.setInt(6, m.getId());
+		prep.executeUpdate();
+	}
 			
 	public static List<Trainer> getAllTrainers() throws SQLException {
 		String query = "SELECT * FROM TRAINER ORDER BY ID";
@@ -346,16 +358,6 @@ public class DatabaseController {
 		prep.setInt(1, id);
 		prep.executeUpdate();
 	}
-	
-//	public static List<Move> getAllMoves() throws SQLException {
-//		String query = "SELECT * FROM MOVE ORDER BY ID";
-//		ResultSet rs = executeQuery(query);
-//		List<Move> m = new LinkedList<Move>();
-//		while (rs.next()) {
-//			m.add(new Move(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getString(6)));
-//		}
-//		return m;
-//	}
 	
 	public static void addKnownMove(KnownMove km) throws SQLException {
 		String insert = "INSERT INTO KNOWN_MOVES VALUES (?, ?)";

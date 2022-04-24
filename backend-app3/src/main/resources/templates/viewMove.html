@@ -10,5 +10,6 @@
 <ul>
 	<li th:each="species : ${learnableSpecies}"><a th:href="'/species?pokedexNum=' + ${species.pokedexNum}" th:text="${species.name}"></a></li>
 </ul><br><br>
+<a th:href="'/editMove?id=' + ${move.id}">Edit</a><br>
 </body>
 </html>
