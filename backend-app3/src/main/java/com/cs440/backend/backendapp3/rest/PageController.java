@@ -111,6 +111,23 @@ public class PageController {
 		AreaManager.addLandmark(id, landmarkName);
 		return editLandmarks(id, model);
 	}
+	
+	@GetMapping("/editSpeciesAndSpawnRates")
+	public ModelAndView editSpeciesAndSpawnRates(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editSpeciesAndSpawnRates");
+		Area area = AreaManager.getArea(id);
+		List<SpeciesAndSpawnRate> result = AreaManager.getSpeciesAndSpawnRateInArea(id);
+		
+		mv.addObject("area", area);
+		mv.addObject("SpeciesAndSpawnRateList", result);
+		return mv;
+	}
+	
+	@PostMapping("/deleteSpeciesAndSpawnRate")
+	public ModelAndView deleteSpeciesAndSpawnRate(int areaId, int pokedexNum, Model model) throws SQLException {
+		AreaManager.deleteSpeciesAndSpawnRate(areaId, pokedexNum);
+		return editSpeciesAndSpawnRates(areaId, model);
+	}
 
 	/**
 	 * TRAINERS

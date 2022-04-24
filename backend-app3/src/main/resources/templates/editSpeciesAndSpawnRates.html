@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h3>Modify existing species and spawn rate</h3>
+<li th:each="SpeciesAndSpawnRate : ${SpeciesAndSpawnRateList}">
+	<a th:text="${SpeciesAndSpawnRate.species.name}"></a> 
+	<a th:text="${SpeciesAndSpawnRate.spawnRate}"></a>
+
+	<form method="POST" th:action="@{/deleteSpeciesAndSpawnRate}">
+	    <input type="hidden" name="areaId" th:value="${area.id}">
+	    <input type="hidden" name="pokedexNum" th:value="${SpeciesAndSpawnRate.species.pokedexNum}">
+
+	    <button type="submit">Delete</button>
+	</form>  
+</li>
+
+<!-- <h3>Add new landmark:</h3>
+<form method="POST" th:action="@{/addLandmark}">
+    <input type="hidden" name="id" th:value="${area.id}">
+    <input type="text" name="landmarkName">
+
+    <button type="submit">Add</button>
+</form>  -->
+<!-- 
+<button type="button" value="Back" th:onclick="'window.location.href=&quot;/viewArea?id=' + ${area.id} + '&quot;'">Back to Area</button> -->
+
+</body>
+</html>
