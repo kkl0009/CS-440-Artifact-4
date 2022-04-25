@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h3>Modify existing adjacencies</h3>
+<li th:each="area : ${adjacentAreas}">
+	<a th:text="${area.name}"></a> 
+
+	<!-- <form method="POST" th:action="@{/deleteSpeciesAndSpawnRate}">
+	    <input type="hidden" name="areaId" th:value="${area.id}">
+	    <input type="hidden" name="pokedexNum" th:value="${SpeciesAndSpawnRate.species.pokedexNum}">
+
+	    <button type="submit">Delete</button>
+	</form>  --> 
+</li>
+
+<h3>Add new adjacency:</h3>
+<form method="POST" th:action="@{/addAdjacency}">
+    <input type="hidden" name="area1Id" th:value="${thisArea.id}">
+	<select name="area2Id">
+		<option th:each="area : ${allAreas}" th:value="${area.id}" th:text="${area.name}"></option>
+	</select><br>
+
+    <button type="submit">Add</button>
+</form> 
+
+<button type="button" value="Back" th:onclick="'window.location.href=&quot;/viewArea?id=' + ${thisArea.id} + '&quot;'">Back to Area</button>
+
+</body>
+</html>

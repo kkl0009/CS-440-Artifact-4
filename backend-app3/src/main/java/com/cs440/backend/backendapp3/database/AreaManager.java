@@ -140,4 +140,39 @@ public class AreaManager {
 		prep.executeUpdate();
 	}
 	
+	public static void addAdjacency(int area1Id, int area2Id) throws SQLException {
+		String insert = "INSERT INTO ADJACENT_TO VALUES (?, ?)";
+		PreparedStatement prep = CONNECTION.prepareStatement(insert);
+		prep.setInt(1, area1Id);
+		prep.setInt(2, area2Id);
+		prep.executeUpdate();
+		
+		PreparedStatement prep2 = CONNECTION.prepareStatement(insert);
+		prep2.setInt(1, area2Id);
+		prep2.setInt(2, area1Id);
+		prep2.executeUpdate();
+	}
+	
+	public static List<Area> getNotAdjacentTo(int id) throws SQLException {
+		String query = 
+			"SELECT * \r\n"
+				+ "FROM AREA\r\n"
+				+ "WHERE ID != ?\r\n"
+				+ "MINUS\r\n"
+				+ "SELECT ID, NAME, AREATYPE\r\n"
+				+ "FROM AREA \r\n"
+				+ "    JOIN ADJACENT_TO ON ID = AREA1ID\r\n"
+				+ "WHERE AREA2ID = ?";
+		
+		PreparedStatement prep = CONNECTION.prepareStatement(query);
+		prep.setInt(1, id);
+		prep.setInt(2, id);
+		ResultSet rs = prep.executeQuery();
+		LinkedList<Area> areas = new LinkedList<Area>();
+		while (rs.next()) {
+			areas.add(new Area(rs.getInt(1), rs.getString(2), rs.getString(3)));
+		}
+		return areas;
+	}
+	
 }

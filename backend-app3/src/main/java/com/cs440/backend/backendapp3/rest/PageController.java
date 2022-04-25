@@ -140,6 +140,26 @@ public class PageController {
 		
 		return editSpeciesAndSpawnRates(areaId, model);
 	}
+	
+	@GetMapping("/editAdjacencies")
+	public ModelAndView editAdjacencies(@RequestParam(value = "id", required = true) int id, Model model) throws SQLException {
+		ModelAndView mv = new ModelAndView("editAdjacencies");
+		Area thisArea = AreaManager.getArea(id);
+		List<Area> allAreas = AreaManager.getNotAdjacentTo(id);
+		allAreas.remove(thisArea);
+		List<Area> adjacentAreas = AreaManager.getAdjacentAreas(id);
+		
+		mv.addObject("thisArea", thisArea);
+		mv.addObject("allAreas", allAreas);
+		mv.addObject("adjacentAreas", adjacentAreas);
+		return mv;
+	}
+	
+	@PostMapping("/addAdjacency")
+	public ModelAndView addAdjacency(int area1Id, int area2Id, Model model) throws SQLException {
+		AreaManager.addAdjacency(area1Id, area2Id);
+		return editAdjacencies(area1Id, model);
+	}
 
 	/**
 	 * TRAINERS
