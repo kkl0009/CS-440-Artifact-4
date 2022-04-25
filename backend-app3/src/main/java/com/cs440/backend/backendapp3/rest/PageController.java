@@ -61,6 +61,7 @@ public class PageController {
 		List<SpeciesAndSpawnRate> spawns = AreaManager.getSpawns(id);
 		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
 		int totalRewardMoney = AreaManager.getTotalRewardMoney(id);
+		int averagePokemonLevel = AreaManager.getAveragePokemonLevel(id);
 		
 		mv.addObject("area", area);
 		mv.addObject("adjacentAreas", adjacentAreas);
@@ -68,6 +69,7 @@ public class PageController {
 		mv.addObject("spawns", spawns);
 		mv.addObject("trainers", trainers);
 		mv.addObject("totalRewardMoney", totalRewardMoney);
+		mv.addObject("averagePokemonLevel", averagePokemonLevel);
 		return mv;
 	}
 	

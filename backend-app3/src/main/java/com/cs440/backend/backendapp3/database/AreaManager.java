@@ -202,4 +202,19 @@ public class AreaManager {
 		return rs.getInt(1);
 	}
 	
+	public static int getAveragePokemonLevel(int id) throws SQLException {
+		String query = 
+			"SELECT AVG(POKEMONLEVEL)\r\n"
+				+ "FROM POKEMON, TRAINER, AREA\r\n"
+				+ "WHERE TRAINER.LocationID = AREA.ID\r\n"
+				+ "    AND POKEMON.TrainerID = TRAINER.ID \r\n"
+				+ "    AND AREA.Id = ?";
+		
+		PreparedStatement prep = CONNECTION.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		rs.next();
+		return rs.getInt(1);
+	}
+	
 }
