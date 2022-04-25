@@ -3,5 +3,7 @@
 <body>
 AREAS<br><br>
 <div th:each="area : ${areas}"><a th:href="'/viewArea?id=' + ${area.id}" th:text="${area.name}"></a><br></div> 
+<br><br>
+<a href="/addArea">Add Area</a>
 </body>
 </html>

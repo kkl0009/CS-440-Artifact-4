@@ -16,6 +16,22 @@ public class AreaManager {
 
 	private static final Connection CONNECTION = ConnectionManager.getConnection();
 	
+	public static int getNextAreaId() throws SQLException {
+		String query = "SELECT MAX(ID) FROM TRAINER";
+		ResultSet rs = CONNECTION.createStatement().executeQuery(query);
+		rs.next();
+		return rs.getInt(1) + 1;
+	}
+	
+	public static void addArea(Area a) throws SQLException {
+		String update = "INSERT INTO AREA VALUES (?, ?, ?)";
+		PreparedStatement prep = CONNECTION.prepareStatement(update);
+		prep.setInt(1, a.getId());
+		prep.setString(2, a.getName());
+		prep.setString(3, a.getTerrain());
+		prep.executeUpdate();
+	}
+	
 	public static void deleteArea(int id) throws SQLException {
 		String delete = "DELETE FROM AREA WHERE ID = ?";
 		PreparedStatement prep = CONNECTION.prepareStatement(delete);

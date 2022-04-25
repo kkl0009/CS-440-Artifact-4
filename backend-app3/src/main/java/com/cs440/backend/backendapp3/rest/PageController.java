@@ -52,6 +52,22 @@ public class PageController {
 	/**
 	 * AREAS
 	 */
+	@GetMapping("/addArea")
+	public ModelAndView addArea() throws SQLException {
+		ModelAndView mv = new ModelAndView("addArea");
+		int id = AreaManager.getNextAreaId();
+		Area area = new Area();
+		area.setId(id);
+		mv.addObject("area", area);
+		return mv;
+	}
+	
+	@PostMapping("/addArea")
+	public ModelAndView addArea(@ModelAttribute Area area, Model model) throws SQLException {
+		AreaManager.addArea(area);
+		return viewArea(area.getId());
+	}
+	
 	@GetMapping("/viewArea")
 	public ModelAndView viewArea(@RequestParam(value = "id", required = true) int id) throws SQLException {
 		ModelAndView mv = new ModelAndView("viewArea");

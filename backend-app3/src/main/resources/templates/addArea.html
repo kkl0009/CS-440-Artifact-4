@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form id="addForm" th:action="@{/addArea}" th:object="${area}" method="POST">
+
+	<input type="hidden" name="id" th:value="${area.id}" th:field="*{id}">
+
+	<label for="name">Name:</label><br>
+	<input type="text" id="name" name="name" th:field="*{name}"><br>
+
+	<label for="terrain">Area Type:</label><br>
+	<input type="text" id="terrain" name="terrain" th:field="*{terrain}"><br>
+
+	<input type="submit" value="Submit">
+	<button type="button" value="Cancel" th:onclick="window.location.href='/areas'">Cancel</button>
+	
+</form>
+
+</body>
+</html>
