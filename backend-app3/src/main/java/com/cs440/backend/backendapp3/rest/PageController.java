@@ -160,6 +160,12 @@ public class PageController {
 		AreaManager.addAdjacency(area1Id, area2Id);
 		return editAdjacencies(area1Id, model);
 	}
+	
+	@PostMapping("/deleteAdjacency")
+	public ModelAndView deleteAdjacency(int area1Id, int area2Id, Model model) throws SQLException {
+		AreaManager.deleteAdjacency(area1Id, area2Id);
+		return editAdjacencies(area1Id, model);
+	}
 
 	/**
 	 * TRAINERS

@@ -6,12 +6,12 @@
 <li th:each="area : ${adjacentAreas}">
 	<a th:text="${area.name}"></a> 
 
-	<!-- <form method="POST" th:action="@{/deleteSpeciesAndSpawnRate}">
-	    <input type="hidden" name="areaId" th:value="${area.id}">
-	    <input type="hidden" name="pokedexNum" th:value="${SpeciesAndSpawnRate.species.pokedexNum}">
+	<form method="POST" th:action="@{/deleteAdjacency}">
+	    <input type="hidden" name="area1Id" th:value="${thisArea.id}">
+	    <input type="hidden" name="area2Id" th:value="${area.id}">
 
 	    <button type="submit">Delete</button>
-	</form>  --> 
+	</form>  
 </li>
 
 <h3>Add new adjacency:</h3>

@@ -153,6 +153,19 @@ public class AreaManager {
 		prep2.executeUpdate();
 	}
 	
+	public static void deleteAdjacency(int area1Id, int area2Id) throws SQLException {
+		String insert = "DELETE FROM ADJACENT_TO WHERE AREA1ID = ? AND AREA2ID = ?";
+		PreparedStatement prep = CONNECTION.prepareStatement(insert);
+		prep.setInt(1, area1Id);
+		prep.setInt(2, area2Id);
+		prep.executeUpdate();
+		
+		PreparedStatement prep2 = CONNECTION.prepareStatement(insert);
+		prep2.setInt(1, area2Id);
+		prep2.setInt(2, area1Id);
+		prep2.executeUpdate();
+	}
+	
 	public static List<Area> getNotAdjacentTo(int id) throws SQLException {
 		String query = 
 			"SELECT * \r\n"
