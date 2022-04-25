@@ -188,4 +188,18 @@ public class AreaManager {
 		return areas;
 	}
 	
+	public static int getTotalRewardMoney(int id) throws SQLException {
+		String query = 
+			"SELECT SUM(TRAINER.RewardMoney)\r\n"
+				+ "FROM TRAINER, AREA\r\n"
+				+ "WHERE TRAINER.LocationID = AREA.ID \r\n"
+				+ "    AND AREA.Id = ?";
+				
+		PreparedStatement prep = CONNECTION.prepareStatement(query);
+		prep.setInt(1, id);
+		ResultSet rs = prep.executeQuery();
+		rs.next();
+		return rs.getInt(1);
+	}
+	
 }

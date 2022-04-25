@@ -18,12 +18,21 @@
 <b>Trainers:</b><br>
 <ul>
 	<li th:each="trainer : ${trainers}"><a th:href="'/viewTrainer?id=' + ${trainer.id}" th:text="${trainer.name}"></a></li>
-</ul><br><br>
+</ul>
+
+<br>
+
+<b>Total reward money for beating the all the trainers: $</b><a th:text="${totalRewardMoney}"></a>
+
+<br><br><br>
 
 <a th:href="'/editArea?id=' + ${area.id}">Edit Area</a><br>
 <a th:href="'/editLandmarks?id=' + ${area.id}">Edit Landmarks</a><br>
 <a th:href="'/editSpeciesAndSpawnRates?id=' + ${area.id}">Edit Species and Spawn Rates</a><br>
 <a th:href="'/editAdjacencies?id=' + ${area.id}">Edit Adjacencies</a><br>
+
+<br>
+
 <a th:href="'/deleteArea?id=' + ${area.id}">Delete</a><br>
 <a href="/areas">Back to Area List</a>
 

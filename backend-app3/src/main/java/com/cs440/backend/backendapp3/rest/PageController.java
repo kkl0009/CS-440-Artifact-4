@@ -60,12 +60,14 @@ public class PageController {
 		List<String> landmarks = AreaManager.getLandmarks(id);
 		List<SpeciesAndSpawnRate> spawns = AreaManager.getSpawns(id);
 		List<Trainer> trainers = DatabaseController.getTrainersInArea(id);
+		int totalRewardMoney = AreaManager.getTotalRewardMoney(id);
 		
 		mv.addObject("area", area);
 		mv.addObject("adjacentAreas", adjacentAreas);
 		mv.addObject("landmarks", landmarks);
 		mv.addObject("spawns", spawns);
 		mv.addObject("trainers", trainers);
+		mv.addObject("totalRewardMoney", totalRewardMoney);
 		return mv;
 	}
 	
